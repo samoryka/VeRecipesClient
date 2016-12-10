@@ -1,0 +1,38 @@
+[
+  {
+    "id": 144,
+    "sourceId": 252895,
+    "name": "Stuffed Squash Blossoms with Basil",
+    "imageURL": "https://spoonacular.com/recipeImages/Stuffed-Squash-Blossoms-with-Basil-252895.jpg",
+    "recipeURL": "http://www.sippitysup.com/recipe/stuffed-squash-blossoms-with-basil/",
+    "preparationTime": 45,
+    "publicationDate": 1481151600000
+  },
+  {
+    "id": 145,
+    "sourceId": 58965,
+    "name": "Mango @@and Raspberry Frozen Dessert",
+    "imageURL": "https://spoonacular.com/recipeImages/mango_raspberry_frozen_dessert-58965.jpg",
+    "recipeURL": "http://www.landolakes.com/recipe/1219/mango-raspberry-frozen-dessert",
+    "preparationTime": 20,
+    "publicationDate": 1481151600000
+  },
+  {
+    "id": 146,
+    "sourceId": 452482,
+    "name": "Slow Cooker Macaroni and Cheese I",
+    "imageURL": "https://spoonacular.com/recipeImages/Slow-Cooker-Macaroni-and-Cheese-I-452482.jpg",
+    "recipeURL": "http://allrecipes.com/Recipe/Slow-Cooker-Macaroni-and-Cheese-I/",
+    "preparationTime": 370,
+    "publicationDate": 1481151600000
+  },
+  {
+    "id": 147,
+    "sourceId": 94853,
+    "name": "Cantaloupe and Cucumber Salad",
+    "imageURL": "https://spoonacular.com/recipeImages/cantaloupe-and-cucumber-salad-2-94853.jpg",
+    "recipeURL": "http://www.food.com/recipe/cantaloupe-and-cucumber-salad-304738",
+    "preparationTime": 15,
+    "publicationDate": 1481151600000
+  }
+]

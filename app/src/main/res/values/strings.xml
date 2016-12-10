@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">VeRecipes</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Bottom Bar menu -->
+    <string name="menu_bottombar_tab1">Profile</string>
+    <string name="menu_bottombar_tab2">Today</string>
+    <string name="menu_bottombar_tab3">Saved</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
