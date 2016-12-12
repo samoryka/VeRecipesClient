@@ -42,8 +42,8 @@ public class DailyRecipesFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static DailyRecipesFragment newInstance() {
-        DailyRecipesFragment fragment = new DailyRecipesFragment();
-        return fragment;
+        return new DailyRecipesFragment();
+
     }
 
     @Override
@@ -64,8 +64,8 @@ public class DailyRecipesFragment extends Fragment {
                 .setSwipeDecor(new SwipeDecor()
                         .setPaddingTop(20)
                         .setRelativeScale(0.01f)
-                        .setSwipeInMsgLayoutId(R.layout.recipe_swipe_in_message_view)
-                        .setSwipeOutMsgLayoutId(R.layout.recipe_swipe_out_message_view));
+                        .setSwipeInMsgLayoutId(R.layout.recipe__daily_card_swipe_in_message_view)
+                        .setSwipeOutMsgLayoutId(R.layout.recipe_daily_card_swipe_out_message_view));
 
         List<Recipe> recipes = JSONConversion.LoadRecipes(mView.getContext());
         for(Recipe recipe : recipes){

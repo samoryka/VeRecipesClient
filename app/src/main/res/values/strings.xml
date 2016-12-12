@@ -8,6 +8,10 @@
     <string name="menu_bottombar_tab2">Today</string>
     <string name="menu_bottombar_tab3">Saved</string>
 
+    <!-- Daily Recipe -->
+    <string name="daily_recipe_reject">Nope</string>
+    <string name="daily_recipe_accept">Save</string>
+
     <!-- Recipe Viewer -->
     <string name="recipe_viewer_share">Share</string>
 </resources>

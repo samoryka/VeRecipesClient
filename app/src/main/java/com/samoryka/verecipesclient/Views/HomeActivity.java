@@ -10,22 +10,22 @@ import android.support.v7.widget.Toolbar;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
+import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
+import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener{
-
-    private BottomBar mBottomBar;
-    private FragNavController fragNavController;
+public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener, RecipeListFragment.OnListFragmentInteractionListener {
 
     //indices to fragments
     private final int TAB_FIRST = FragNavController.TAB1;
     private final int TAB_SECOND = FragNavController.TAB2;
     private final int TAB_THIRD = FragNavController.TAB3;
-
+    private BottomBar mBottomBar;
+    private FragNavController fragNavController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         //add fragments to list
         fragments.add(new PlaceHolderFragment());
         fragments.add(DailyRecipesFragment.newInstance());
-        fragments.add(new PlaceHolderFragment());
+        fragments.add(RecipeListFragment.newInstance(1));
 
         //link fragments to container
         fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
@@ -98,6 +98,11 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Recipe recipe) {
 
     }
 }

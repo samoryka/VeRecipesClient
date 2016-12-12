@@ -1,7 +1,6 @@
 package com.samoryka.verecipesclient.Views.DailyRecipes;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +19,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.RecipeChromeCustomTab;
 
-@Layout(R.layout.recipe_card_view)
+@Layout(R.layout.recipe_daily_card_view)
 public class RecipeCard {
 
     @View(R.id.recipeImage)
