@@ -8,6 +8,6 @@
     <string name="menu_bottombar_tab2">Today</string>
     <string name="menu_bottombar_tab3">Saved</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Recipe Viewer -->
+    <string name="recipe_viewer_share">Share</string>
 </resources>
