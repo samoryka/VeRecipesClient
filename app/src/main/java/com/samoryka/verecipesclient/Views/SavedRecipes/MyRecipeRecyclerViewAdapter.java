@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment.OnListFragmentInteractionListener;
@@ -36,8 +38,14 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mRecipe = mRecipes.get(position);
-        holder.mIdView.setText(mRecipes.get(position).getId().toString());
-        holder.mContentView.setText(mRecipes.get(position).getName());
+
+        Glide.with(holder.mImageRecipeView.getContext())
+                .load(mRecipes.get(position).getImageURL())
+                .placeholder(R.color.colorPrimaryLight)
+                .into(holder.mImageRecipeView);
+
+        holder.mNameView.setText(mRecipes.get(position).getName());
+        holder.mPreparationTimeView.setText(mRecipes.get(position).getPreparationTime() + " min");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +66,22 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mNameView;
+        public final TextView mPreparationTimeView;
+        public final ImageView mImageRecipeView;
         public Recipe mRecipe;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mNameView = (TextView) view.findViewById(R.id.recipeName);
+            mPreparationTimeView = (TextView) view.findViewById(R.id.recipePreparationTime);
+            mImageRecipeView = (ImageView) view.findViewById(R.id.recipeImage);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mPreparationTimeView.getText() + "'";
         }
     }
 }
