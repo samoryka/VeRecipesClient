@@ -2,10 +2,13 @@ package com.samoryka.verecipesclient.Views.SavedRecipes;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,8 @@ public class RecipeListFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private MyRecipeRecyclerViewAdapter mAdapter;
+    private List<Recipe> recipes;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,8 +74,11 @@ public class RecipeListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            List<Recipe> recipes = JSONConversion.LoadRecipes(context);
-            recyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(recipes, mListener));
+            recipes = JSONConversion.LoadRecipes(context);
+            mAdapter = new MyRecipeRecyclerViewAdapter(recipes, mListener);
+            recyclerView.setAdapter(mAdapter);
+
+            createTouchHelper().attachToRecyclerView(recyclerView);
         }
         return view;
     }
@@ -91,6 +99,27 @@ public class RecipeListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    // Implementation of swipe to delete
+    private ItemTouchHelper createTouchHelper() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                mAdapter.notifyItemRemoved(position);
+                recipes.remove(position);
+
+            }
+        };
+
+        return new ItemTouchHelper(simpleItemTouchCallback);
     }
 
     /**
