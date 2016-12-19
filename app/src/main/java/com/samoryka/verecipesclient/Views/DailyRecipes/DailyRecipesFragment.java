@@ -31,8 +31,8 @@ public class DailyRecipesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private SwipePlaceHolderView mSwipeView;
-    private ImageButton mAceptBtn;
-    private ImageButton mRejectBtn;
+    private Button mAceptBtn;
+    private Button mRejectBtn;
     private View mPlaceHolderView;
     private View mView;
     private Context mContext;
@@ -62,8 +62,8 @@ public class DailyRecipesFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_daily_recipes, container, false);
         mContext = mView.getContext();
         mSwipeView = (SwipePlaceHolderView) mView.findViewById(R.id.swipeView);
-        mAceptBtn = (ImageButton) mView.findViewById(R.id.acceptBtn);
-        mRejectBtn = (ImageButton) mView.findViewById(R.id.rejectBtn);
+        mAceptBtn = (Button) mView.findViewById(R.id.acceptBtn);
+        mRejectBtn = (Button) mView.findViewById(R.id.rejectBtn);
         mPlaceHolderView = mView.findViewById(R.id.emptyStackPlaceHolder);
 
 

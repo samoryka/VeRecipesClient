@@ -18,16 +18,18 @@
         android:layout_gravity="bottom"
         android:gravity="center"
         android:orientation="horizontal">
-        <ImageButton
+
+        <Button
             android:id="@+id/rejectBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/daily_recipes_reject_button"
-            android:elevation="2dp"
-            />
-        <ImageButton
+            android:background="@drawable/daily_recipes_reject_button" />
+
+        <Button
             android:id="@+id/acceptBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="50dp"
