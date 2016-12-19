@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Utilities.RecipeChromeCustomTab;
 import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
         mRecipes = recipes;
         mListener = listener;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,10 +57,13 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mRecipe);
+                    RecipeChromeCustomTab.openRecipeTab(v.getContext(), holder.mRecipe);
                 }
             }
         });
+
     }
+
 
     @Override
     public int getItemCount() {

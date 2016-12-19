@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
@@ -29,6 +31,9 @@ public class DailyRecipesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private SwipePlaceHolderView mSwipeView;
+    private ImageButton mAceptBtn;
+    private ImageButton mRejectBtn;
+    private View mPlaceHolderView;
     private View mView;
     private Context mContext;
 
@@ -55,9 +60,12 @@ public class DailyRecipesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_daily_recipes, container, false);
-
-        mSwipeView = (SwipePlaceHolderView) mView.findViewById(R.id.swipeView);
         mContext = mView.getContext();
+        mSwipeView = (SwipePlaceHolderView) mView.findViewById(R.id.swipeView);
+        mAceptBtn = (ImageButton) mView.findViewById(R.id.acceptBtn);
+        mRejectBtn = (ImageButton) mView.findViewById(R.id.rejectBtn);
+        mPlaceHolderView = mView.findViewById(R.id.emptyStackPlaceHolder);
+
 
         mSwipeView.getBuilder()
                 .setDisplayViewCount(3)
@@ -69,8 +77,9 @@ public class DailyRecipesFragment extends Fragment {
 
         List<Recipe> recipes = JSONConversion.LoadRecipes(mView.getContext());
         for(Recipe recipe : recipes){
-            mSwipeView.addView(new RecipeCard(mContext, recipe, mSwipeView));
+            mSwipeView.addView(new RecipeCard(mContext, recipe, mSwipeView, this));
         }
+
 
         mView.findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +98,6 @@ public class DailyRecipesFragment extends Fragment {
         return mView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -111,6 +114,21 @@ public class DailyRecipesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void checkCardsLeft() {
+        // If the card that's swiped is the last one, we hide the non-placeholder views
+        if (mSwipeView.getChildCount() > 1) {
+            mSwipeView.setVisibility(View.VISIBLE);
+            mAceptBtn.setVisibility(View.VISIBLE);
+            mRejectBtn.setVisibility(View.VISIBLE);
+            mPlaceHolderView.setVisibility(View.GONE);
+        } else {
+            mSwipeView.setVisibility(View.GONE);
+            mAceptBtn.setVisibility(View.GONE);
+            mRejectBtn.setVisibility(View.GONE);
+            mPlaceHolderView.setVisibility(View.VISIBLE);
+        }
     }
 
     /**

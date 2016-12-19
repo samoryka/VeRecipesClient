@@ -19,6 +19,8 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.RecipeChromeCustomTab;
 
+import static android.view.View.GONE;
+
 @Layout(R.layout.recipe_daily_card_view)
 public class RecipeCard {
 
@@ -34,11 +36,13 @@ public class RecipeCard {
     private Recipe mRecipe;
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
+    private DailyRecipesFragment mFragment;
 
-    public RecipeCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView) {
+    public RecipeCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView, DailyRecipesFragment fragment) {
         mContext = context;
         mRecipe = recipe;
         mSwipeView = swipeView;
+        mFragment = fragment;
     }
 
     @Resolve
@@ -69,6 +73,7 @@ public class RecipeCard {
     @SwipeOut
     private void onSwipedOut(){
         //Log.d("EVENT", "onSwipedOut");
+        mFragment.checkCardsLeft();
     }
 
     @SwipeCancelState
@@ -79,6 +84,7 @@ public class RecipeCard {
     @SwipeIn
     private void onSwipeIn(){
         //Log.d("EVENT", "onSwipedIn");
+        mFragment.checkCardsLeft();
     }
 
     @SwipeInState
@@ -94,4 +100,5 @@ public class RecipeCard {
     private void cardClicked() {
         RecipeChromeCustomTab.openRecipeTab(mContext, mRecipe);
     }
+
 }

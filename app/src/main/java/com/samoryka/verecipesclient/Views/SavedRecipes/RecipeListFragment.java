@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
@@ -32,6 +33,7 @@ public class RecipeListFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private MyRecipeRecyclerViewAdapter mAdapter;
     private List<Recipe> recipes;
+    private View mEmptyListPlaceHoldedrView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,23 +65,24 @@ public class RecipeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        Context context = view.getContext();
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
-            recipes = JSONConversion.LoadRecipes(context);
-            mAdapter = new MyRecipeRecyclerViewAdapter(recipes, mListener);
-            recyclerView.setAdapter(mAdapter);
-
-            createTouchHelper().attachToRecyclerView(recyclerView);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+
+        recipes = JSONConversion.LoadRecipes(context);
+        mAdapter = new MyRecipeRecyclerViewAdapter(recipes, mListener);
+
+        recyclerView.setAdapter(mAdapter);
+
+        createTouchHelper().attachToRecyclerView(recyclerView);
+
+        // Set the empty list placeholder view
+        mEmptyListPlaceHoldedrView = view.findViewById(R.id.emptyListPlaceHolder);
         return view;
     }
 
@@ -115,11 +118,20 @@ public class RecipeListFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 mAdapter.notifyItemRemoved(position);
                 recipes.remove(position);
+                checkAdapterEmpty();
 
             }
         };
 
         return new ItemTouchHelper(simpleItemTouchCallback);
+    }
+
+    // checks if there are any recipe left to display. if that's the case, we'll display a placeholder
+    private void checkAdapterEmpty() {
+        if (mAdapter.getItemCount() == 0)
+            mEmptyListPlaceHoldedrView.setVisibility(View.VISIBLE);
+        else
+            mEmptyListPlaceHoldedrView.setVisibility(View.GONE);
     }
 
     /**

@@ -8,9 +8,13 @@
     <string name="menu_bottombar_tab2">Today</string>
     <string name="menu_bottombar_tab3">Saved</string>
 
-    <!-- Daily Recipe -->
+    <!-- Daily Recipes -->
     <string name="daily_recipe_reject">Nope</string>
     <string name="daily_recipe_accept">Save</string>
+    <string name="daily_recipes_placeholder">You\'re done for today</string>
+
+    <!-- Saved Recipes -->
+    <string name="saved_recipes_placeholder">No saved recipes</string>
 
     <!-- Recipe Viewer -->
     <string name="recipe_viewer_share">Share</string>
