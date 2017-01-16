@@ -17,6 +17,9 @@ import com.samoryka.verecipesclient.Utilities.JSONConversion;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -26,11 +29,12 @@ import java.util.List;
 public class RecipeListFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    @BindView(R.id.emptyListPlaceHolder)
+    View mEmptyListPlaceHolderView;
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyRecipeRecyclerViewAdapter mAdapter;
     private List<Recipe> recipes;
-    private View mEmptyListPlaceHoldedrView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,7 +43,6 @@ public class RecipeListFragment extends Fragment {
     public RecipeListFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static RecipeListFragment newInstance(int columnCount) {
         RecipeListFragment fragment = new RecipeListFragment();
@@ -64,6 +67,8 @@ public class RecipeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
         Context context = view.getContext();
 
+        ButterKnife.bind(this, view);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -78,8 +83,6 @@ public class RecipeListFragment extends Fragment {
 
         createTouchHelper().attachToRecyclerView(recyclerView);
 
-        // Set the empty list placeholder view
-        mEmptyListPlaceHoldedrView = view.findViewById(R.id.emptyListPlaceHolder);
         return view;
     }
 
@@ -126,9 +129,9 @@ public class RecipeListFragment extends Fragment {
     // checks if there are any recipe left to display. if that's the case, we'll display a placeholder
     private void checkAdapterEmpty() {
         if (mAdapter.getItemCount() == 0)
-            mEmptyListPlaceHoldedrView.setVisibility(View.VISIBLE);
+            mEmptyListPlaceHolderView.setVisibility(View.VISIBLE);
         else
-            mEmptyListPlaceHoldedrView.setVisibility(View.GONE);
+            mEmptyListPlaceHolderView.setVisibility(View.GONE);
     }
 
     /**

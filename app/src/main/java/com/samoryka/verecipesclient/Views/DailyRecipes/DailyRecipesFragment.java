@@ -14,11 +14,14 @@ import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.StringFormatUtility;
+import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
 
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,16 +37,19 @@ import rx.schedulers.Schedulers;
  */
 public class DailyRecipesFragment extends Fragment {
 
+    @BindView(R.id.swipeView)
+    SwipePlaceHolderView mSwipeView;
+    @BindView(R.id.acceptBtn)
+    Button mAceptBtn;
+    @BindView(R.id.rejectBtn)
+    Button mRejectBtn;
+    @BindView(R.id.emptyStackPlaceHolder)
+    View mPlaceHolderView;
     private OnFragmentInteractionListener mListener;
-
-    private SwipePlaceHolderView mSwipeView;
-    private Button mAceptBtn;
-    private Button mRejectBtn;
-    private View mPlaceHolderView;
     private View mView;
     private Context mContext;
 
-    private VeRecipesService veRecipesService;
+    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     // self-reference to be able to add a recipe on this fragment in an inner class (ie in the HTTP request)
     private DailyRecipesFragment thisFragment = this;
@@ -51,16 +57,9 @@ public class DailyRecipesFragment extends Fragment {
     public DailyRecipesFragment() {
     }   // Required empty public constructor
 
-    /**
-     * Returns an instance of a DailyRecipesFragment
-     *
-     * @param service
-     * @return
-     */
-    public static DailyRecipesFragment newInstance(VeRecipesService service) {
-        DailyRecipesFragment fragment = new DailyRecipesFragment();
-        fragment.veRecipesService = service;
-        return fragment;
+
+    public static DailyRecipesFragment newInstance() {
+        return new DailyRecipesFragment();
 
     }
 
@@ -72,13 +71,11 @@ public class DailyRecipesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // View elements mapping
+        //UI Elements setup
         mView = inflater.inflate(R.layout.fragment_daily_recipes, container, false);
         mContext = mView.getContext();
-        mSwipeView = (SwipePlaceHolderView) mView.findViewById(R.id.swipeView);
-        mAceptBtn = (Button) mView.findViewById(R.id.acceptBtn);
-        mRejectBtn = (Button) mView.findViewById(R.id.rejectBtn);
-        mPlaceHolderView = mView.findViewById(R.id.emptyStackPlaceHolder);
+        ButterKnife.bind(this, mView);
+
 
         mSwipeView.getBuilder()
                 .setDisplayViewCount(3)
@@ -87,6 +84,7 @@ public class DailyRecipesFragment extends Fragment {
                         .setRelativeScale(0.01f)
                         .setSwipeInMsgLayoutId(R.layout.recipe__daily_card_swipe_in_message_view)
                         .setSwipeOutMsgLayoutId(R.layout.recipe_daily_card_swipe_out_message_view));
+
 
         // We get the current date to load today's recipes
         String dateString = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());

@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         //list of fragments
         List<Fragment> fragments = new ArrayList<>(3);
         fragments.add(new PlaceHolderFragment());
-        fragments.add(DailyRecipesFragment.newInstance(veRecipesService));
+        fragments.add(DailyRecipesFragment.newInstance());
         fragments.add(RecipeListFragment.newInstance(1));
         //link fragments to container
         fragNavController = new FragNavController(getSupportFragmentManager(),R.id.container,fragments);
