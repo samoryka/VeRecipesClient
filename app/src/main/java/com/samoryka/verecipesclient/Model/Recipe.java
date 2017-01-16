@@ -50,9 +50,10 @@ public class Recipe {
         this.publicationDate = publicationTime;
     }
 
-
-    // Corrects the characters that we had to modify for the JSON parsing
-    // ex: "@@and" actually is "&"
+    /**
+     * Corrects the characters that we had to modify for the JSON parsing
+     * ex: "@@and" actually is "&"
+     */
     public void correctJSONTextFormatting() {
 
         this.setName( this.getName().replaceAll("@@and","&"));
@@ -76,7 +77,7 @@ public class Recipe {
         this.setRecipeURL( this.getRecipeURL().replaceAll("@@openingSquareBracket","["));
         this.setRecipeURL( this.getRecipeURL().replaceAll("@@closingSquareBracket","]"));
     }
-    
+
     @Override
     public String toString() {
         return "Recipe " + id + ": " + name;
@@ -86,54 +87,52 @@ public class Recipe {
         return id;
     }
 
-    public Long getSourceId() {
-        return sourceId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public String getRecipeURL() {
-        return recipeURL;
-    }
-
-    public int getPreparationTime() {
-        return preparationTime;
-    }
-
-    public Date getPublicationDate() {
-        return publicationDate;
-    }
-
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getSourceId() {
+        return sourceId;
     }
 
     public void setSourceId(Long sourceId) {
         this.sourceId = sourceId;
     }
 
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
 
+    public String getRecipeURL() {
+        return recipeURL;
+    }
+
     public void setRecipeURL(String recipeURL) {
         this.recipeURL = recipeURL;
     }
 
+    public int getPreparationTime() {
+        return preparationTime;
+    }
+
     public void setPreparationTime(int preparationTime) {
         this.preparationTime = preparationTime;
+    }
+
+    public Date getPublicationDate() {
+        return publicationDate;
     }
 
     public void setPublicationDate(Date publicationDate) {

@@ -8,6 +8,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
 import com.samoryka.verecipesclient.Views.DailyRecipes.RecipeCard;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,9 @@ public class WebRequestManager {
 
         final List<Recipe> recipes = new ArrayList<Recipe>();
 
-        Call<List<Recipe>> call = veRecipesService.listRecipesByDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String parsedDate = dateFormat.format(mDate);
+        Call<List<Recipe>> call = veRecipesService.listRecipesByDate(parsedDate);
 
         call.enqueue(new Callback<List<Recipe>>() {
             @Override

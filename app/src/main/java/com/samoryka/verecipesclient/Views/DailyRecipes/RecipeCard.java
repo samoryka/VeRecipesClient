@@ -44,7 +44,7 @@ public class RecipeCard {
     }
 
     @Resolve
-    private void onResolved(){
+    private void onResolved() {
         Glide.with(mContext)
                 .load(mRecipe.getImageURL())
                 .placeholder(R.color.colorPrimaryLight)
@@ -69,25 +69,25 @@ public class RecipeCard {
     }
 
     @SwipeOut
-    private void onSwipedOut(){
+    private void onSwipedOut() {
         mFragment.checkCardsLeft();
     }
 
     @SwipeCancelState
-    private void onSwipeCancelState(){
+    private void onSwipeCancelState() {
     }
 
     @SwipeIn
-    private void onSwipeIn(){
+    private void onSwipeIn() {
         mFragment.checkCardsLeft();
     }
 
     @SwipeInState
-    private void onSwipeInState(){
+    private void onSwipeInState() {
     }
 
     @SwipeOutState
-    private void onSwipeOutState(){
+    private void onSwipeOutState() {
     }
 
     private void cardClicked() {
