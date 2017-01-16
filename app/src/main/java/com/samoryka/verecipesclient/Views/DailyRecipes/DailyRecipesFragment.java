@@ -11,11 +11,18 @@ import android.widget.Button;
 
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
+import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Utilities.StringFormatUtility;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
-import com.samoryka.verecipesclient.Web.WebRequestManager;
 
 import java.util.Calendar;
+import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +44,9 @@ public class DailyRecipesFragment extends Fragment {
     private Context mContext;
 
     private VeRecipesService veRecipesService;
+
+    // self-reference to be able to add a recipe on this fragment in an inner class (ie in the HTTP request)
+    private DailyRecipesFragment thisFragment = this;
 
     public DailyRecipesFragment() {
     }   // Required empty public constructor
@@ -78,10 +88,31 @@ public class DailyRecipesFragment extends Fragment {
                         .setSwipeInMsgLayoutId(R.layout.recipe__daily_card_swipe_in_message_view)
                         .setSwipeOutMsgLayoutId(R.layout.recipe_daily_card_swipe_out_message_view));
 
-        // Recipes loading
-        WebRequestManager.dailyRecipesAsSwipePlaceHolderView(veRecipesService, Calendar.getInstance().getTime(), mSwipeView, mContext,
-                this);
+        // We get the current date to load today's recipes
+        String dateString = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());
 
+        // Asynchronous HTTP recipes request
+        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesByDate(dateString);
+        recipeListObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Recipe>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Recipe> recipes) {
+                        for (Recipe recipe : recipes) {
+                            mSwipeView.addView(new RecipeCard(mContext, recipe, mSwipeView, thisFragment));
+                        }
+                    }
+                });
 
         // OnClickListeners
         mView.findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {

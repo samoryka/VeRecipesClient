@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -29,6 +30,7 @@ public class RetrofitHelper {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(VERECIPES_URL)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
                 .build();
 

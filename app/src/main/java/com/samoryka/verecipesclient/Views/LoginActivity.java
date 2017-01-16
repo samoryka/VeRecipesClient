@@ -15,21 +15,25 @@ import com.samoryka.verecipesclient.Model.AppUser;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
-import com.samoryka.verecipesclient.Web.WebRequestManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    @Bind(R.id.input_username)
+    private static AppUser loggedUser;
+    @BindView(R.id.input_username)
     EditText usernameText;
-    @Bind(R.id.input_password)
+    @BindView(R.id.input_password)
     EditText passwordText;
-    @Bind(R.id.btn_login)
+    @BindView(R.id.btn_login)
     Button loginButton;
-    @Bind(R.id.link_signup)
+    @BindView(R.id.link_signup)
     TextView signupLink;
     private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
@@ -52,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                //Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                //startActivityForResult(intent, REQUEST_SIGNUP);
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
     }
@@ -76,13 +80,34 @@ public class LoginActivity extends AppCompatActivity {
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
-        final AppUser user = WebRequestManager.loginAppUser(veRecipesService, username, password);
+        // Asynchronous HTTP login request
+        Observable<AppUser> appUserObservable = veRecipesService.loginUser(username, password);
+        appUserObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<AppUser>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AppUser appUser) {
+                        loggedUser = appUser;
+                    }
+                });
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        if (user.getId() > 0)
+                        if (loggedUser.getId() > 0) {
+                            Log.d(TAG, "User id: " + loggedUser.getId());
                             onLoginSuccess();
+                        }
                         else
                             onLoginFailed();
                         progressDialog.dismiss();
@@ -95,10 +120,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+                onLoginSuccess();
             }
         }
     }
@@ -111,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
+        //TODO : Save User in shared preferences
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }
