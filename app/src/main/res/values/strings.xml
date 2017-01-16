@@ -18,4 +18,17 @@
 
     <!-- Recipe Viewer -->
     <string name="recipe_viewer_share">Share</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Login Screen -->
+    <string name="login_button_login">Login</string>
+    <string name="login_hint_username">Username</string>
+    <string name="login_hint_password">Password</string>
+    <string name="login_signup_catchphrase">No account yet? Join us!</string>
+    <string name="login_loading">Authenticating</string>
+    <string name="login_error">Invalid password or username</string>
+    <string name="login_error_username">Invalid username (it should at least 3 characters long)</string>
+    <string name="login_error_password">Invalid password (it should at least 8 characters long)</string>
+
+
 </resources>

@@ -19,5 +19,5 @@ public interface VeRecipesService {
     Call<List<Recipe>> listRecipesByDate(@Query("date") String date);
 
     @GET("user")
-    Call<AppUser> loginUser();
+    Call<AppUser> loginUser(@Query("username") String username, @Query("password") String password);
 }

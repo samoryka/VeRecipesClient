@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.mindorks.placeholderview.SwipePlaceHolderView;
+import com.samoryka.verecipesclient.Model.AppUser;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
 import com.samoryka.verecipesclient.Views.DailyRecipes.RecipeCard;
@@ -12,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,5 +63,37 @@ public class WebRequestManager {
                 Log.d(LOG_TAG, t.toString());
             }
         });
+
+    }
+
+    public static AppUser loginAppUser(VeRecipesService veRecipesService, String username, String password) {
+        Log.d(LOG_TAG, "Login user " + username);
+
+        final AppUser user = new AppUser();
+
+        Call<AppUser> call = veRecipesService.loginUser(username, password);
+        call.enqueue(new Callback<AppUser>() {
+            @Override
+            public void onResponse(Call<AppUser> call, Response<AppUser> response) {
+                AppUser fetchedUser = response.body();
+                if (fetchedUser != null) {
+                    user.setId(fetchedUser.getId());
+                    user.setUsername(fetchedUser.getUsername());
+                    user.setPassword(fetchedUser.getPassword());
+                    user.setSignUpDate(fetchedUser.getSignUpDate());
+                    Log.d(LOG_TAG, "Login successful");
+                }
+
+
+                Log.d(LOG_TAG, "Login failed: user not signed up");
+            }
+
+            @Override
+            public void onFailure(Call<AppUser> call, Throwable t) {
+                Log.d(LOG_TAG, "Failed to login user");
+            }
+        });
+
+        return user;
     }
 }

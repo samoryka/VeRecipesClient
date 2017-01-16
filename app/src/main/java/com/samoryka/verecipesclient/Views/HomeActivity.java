@@ -1,18 +1,12 @@
 package com.samoryka.verecipesclient.Views;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -20,15 +14,11 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
 import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment;
+import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener, RecipeListFragment.OnListFragmentInteractionListener {
 
@@ -36,7 +26,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     private final int TAB_FIRST = FragNavController.TAB1;
     private final int TAB_SECOND = FragNavController.TAB2;
     private final int TAB_THIRD = FragNavController.TAB3;
-    private final String VERECIPES_URL = "http://testverecipes.eu-central-1.elasticbeanstalk.com/";
+
     private BottomBar mBottomBar;
     private FragNavController fragNavController;
     private VeRecipesService veRecipesService;
@@ -45,7 +35,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initializeVeRecipesService();
+        veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -116,21 +106,5 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     @Override
     public void onListFragmentInteraction(Recipe recipe) {
 
-    }
-
-    private void initializeVeRecipesService() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(VERECIPES_URL)
-                .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
-                .build();
-
-        veRecipesService = retrofit.create(VeRecipesService.class);
     }
 }
