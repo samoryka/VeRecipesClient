@@ -32,5 +32,7 @@ dependencies {
     compile 'com.ncapdevi:frag-nav:1.0.3'
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.android.support:customtabs:25.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     testCompile 'junit:junit:4.12'
 }

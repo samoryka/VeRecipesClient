@@ -8,15 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
-import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
-import com.samoryka.verecipesclient.Utilities.JSONConversion;
+import com.samoryka.verecipesclient.Web.VeRecipesService;
+import com.samoryka.verecipesclient.Web.WebRequestManager;
 
-import java.util.List;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,17 +36,21 @@ public class DailyRecipesFragment extends Fragment {
     private View mView;
     private Context mContext;
 
-    public DailyRecipesFragment() { }   // Required empty public constructor
+    private VeRecipesService veRecipesService;
+
+    public DailyRecipesFragment() {
+    }   // Required empty public constructor
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Returns an instance of a DailyRecipesFragment
      *
-     * @return A new instance of fragment DailyRecipesFragment.
+     * @param service
+     * @return
      */
-    // TODO: Rename and change types and number of parameters
-    public static DailyRecipesFragment newInstance() {
-        return new DailyRecipesFragment();
+    public static DailyRecipesFragment newInstance(VeRecipesService service) {
+        DailyRecipesFragment fragment = new DailyRecipesFragment();
+        fragment.veRecipesService = service;
+        return fragment;
 
     }
 
@@ -57,15 +60,15 @@ public class DailyRecipesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // View elements mapping
         mView = inflater.inflate(R.layout.fragment_daily_recipes, container, false);
         mContext = mView.getContext();
         mSwipeView = (SwipePlaceHolderView) mView.findViewById(R.id.swipeView);
         mAceptBtn = (Button) mView.findViewById(R.id.acceptBtn);
         mRejectBtn = (Button) mView.findViewById(R.id.rejectBtn);
         mPlaceHolderView = mView.findViewById(R.id.emptyStackPlaceHolder);
-
 
         mSwipeView.getBuilder()
                 .setDisplayViewCount(3)
@@ -75,12 +78,12 @@ public class DailyRecipesFragment extends Fragment {
                         .setSwipeInMsgLayoutId(R.layout.recipe__daily_card_swipe_in_message_view)
                         .setSwipeOutMsgLayoutId(R.layout.recipe_daily_card_swipe_out_message_view));
 
-        List<Recipe> recipes = JSONConversion.LoadRecipes(mView.getContext());
-        for(Recipe recipe : recipes){
-            mSwipeView.addView(new RecipeCard(mContext, recipe, mSwipeView, this));
-        }
+        // Recipes loading
+        WebRequestManager.dailyRecipesAsSwipePlaceHolderView(veRecipesService, Calendar.getInstance().getTime(), mSwipeView, mContext,
+                this);
 
 
+        // OnClickListeners
         mView.findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +119,9 @@ public class DailyRecipesFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Checks the number of cards in the view, in order ro make the placeholder appear at the right time
+     */
     public void checkCardsLeft() {
         // If the card that's swiped is the last one, we hide the non-placeholder views
         if (mSwipeView.getChildCount() > 1) {
