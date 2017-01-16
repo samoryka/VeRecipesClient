@@ -104,8 +104,8 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        if (loggedUser.getId() > 0) {
-                            Log.d(TAG, "User id: " + loggedUser.getId());
+                        if (loggedUser != null && loggedUser.getId() > 0) {
+                            Log.d(TAG, "User id: " + loggedUser.getId() + ", " + loggedUser.getUsername());
                             onLoginSuccess();
                         }
                         else
