@@ -13,6 +13,7 @@ import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Utilities.StringFormatUtility;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
@@ -85,32 +86,7 @@ public class DailyRecipesFragment extends Fragment {
                         .setSwipeInMsgLayoutId(R.layout.recipe__daily_card_swipe_in_message_view)
                         .setSwipeOutMsgLayoutId(R.layout.recipe_daily_card_swipe_out_message_view));
 
-
-        // We get the current date to load today's recipes
-        String dateString = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());
-
-        // Asynchronous HTTP recipes request
-        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesByDate(dateString);
-        recipeListObservable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Recipe>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<Recipe> recipes) {
-                        for (Recipe recipe : recipes) {
-                            mSwipeView.addView(new RecipeCard(mContext, recipe, mSwipeView, thisFragment));
-                        }
-                    }
-                });
+        loadRecipes();
 
         // OnClickListeners
         mView.findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
@@ -164,6 +140,55 @@ public class DailyRecipesFragment extends Fragment {
             mRejectBtn.setVisibility(View.GONE);
             mPlaceHolderView.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Loads the current day's recipes into the stacked card view ("à la Tinder")
+     */
+    private void loadRecipes() {
+        String dateString = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());
+        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesByDate(dateString);
+        recipeListObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Recipe>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Recipe> recipes) {
+
+                        // We check the number of cards to add by seeing if the user has already swiped cards
+                        // today
+                        int firstIndex = 0;
+                        long lastRecipeSwipedId = SharedPreferencesUtility.getLastSwipedRecipe(getContext());
+
+                        String lastVisit = StringFormatUtility.DateToYYYYMMDD(SharedPreferencesUtility.getLastVisit(getContext()));
+                        String today = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());
+
+                        if (lastVisit.equals(today)) {
+                            for (int i = 0; i < recipes.size(); i++) {
+                                if (recipes.get(i).getId() == lastRecipeSwipedId) {
+                                    firstIndex = i + 1;
+                                    break;
+                                }
+                            }
+                        }
+
+                        for (int i = firstIndex; i < recipes.size(); i++) {
+                            mSwipeView.addView(new RecipeCard(mContext, recipes.get(i), mSwipeView, thisFragment));
+                        }
+
+                        checkCardsLeft();
+                    }
+                });
+
     }
 
     /**

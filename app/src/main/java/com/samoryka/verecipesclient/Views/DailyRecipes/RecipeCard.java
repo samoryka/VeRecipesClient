@@ -79,6 +79,7 @@ public class RecipeCard {
     @SwipeOut
     private void onSwipedOut() {
         mFragment.checkCardsLeft();
+        SharedPreferencesUtility.setLastSwipedRecipe(mContext, mRecipe.getId());
     }
 
     @SwipeCancelState
@@ -89,6 +90,7 @@ public class RecipeCard {
     private void onSwipeIn() {
         mFragment.checkCardsLeft();
         saveRecipe();
+        SharedPreferencesUtility.setLastSwipedRecipe(mContext, mRecipe.getId());
     }
 
     @SwipeInState

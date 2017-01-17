@@ -21,6 +21,7 @@ import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,6 +57,8 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         } else {
             loggedInUser = SharedPreferencesUtility.getLoggedInUser(this);
             refreshLoggedInUser();
+
+            SharedPreferencesUtility.setLastVisit(this, Calendar.getInstance().getTime());
         }
 
         //FragNav
