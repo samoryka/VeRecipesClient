@@ -1,5 +1,6 @@
 package com.samoryka.verecipesclient.Views;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -12,6 +13,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
 import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
@@ -34,6 +36,12 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // If the user is already logged in, we redirect him to the main activity
+        if (!SharedPreferencesUtility.checkUserLoggedIn(this)) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        }
 
         veRecipesService = RetrofitHelper.initializeVeRecipesService();
 

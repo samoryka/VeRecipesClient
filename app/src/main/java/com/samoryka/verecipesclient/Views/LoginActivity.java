@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.samoryka.verecipesclient.Model.AppUser;
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
 
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -120,7 +123,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                onLoginSuccess();
+                usernameText.setText(data.getStringExtra("username"));
+                passwordText.setText(data.getStringExtra("password"));
             }
         }
     }
@@ -133,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
-        //TODO : Save User in shared preferences
+        SharedPreferencesUtility.setLoggedInUser(this, loggedUser);
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }

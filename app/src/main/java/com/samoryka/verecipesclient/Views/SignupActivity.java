@@ -1,6 +1,7 @@
 package com.samoryka.verecipesclient.Views;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -114,14 +115,18 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
-        //TODO : transmit user infos
-        setResult(RESULT_OK, null);
+
+        //We put the given credentials in the intent to auto-fill the login fields
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("username", usernameText.getText().toString());
+        resultIntent.putExtra("password", passwordText.getText().toString());
+
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), getString(R.string.signup_error), Toast.LENGTH_LONG).show();
-
         signupButton.setEnabled(true);
     }
 

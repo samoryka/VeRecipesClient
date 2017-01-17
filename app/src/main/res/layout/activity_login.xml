@@ -29,7 +29,7 @@
             android:textColor="@color/white"
             android:textSize="32sp" />
 
-        <!-- Email Label -->
+        <!-- Username Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -29,7 +29,7 @@
             android:textColor="@color/white"
             android:textSize="32sp" />
 
-        <!--  Name Label -->
+        <!--  Username Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,8 +41,9 @@
                 android:id="@+id/signup_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 android:hint="@string/signup_hint_username"
-                android:inputType="textCapWords"
+                android:inputType="text"
                 android:textColor="@color/white" />
         </android.support.design.widget.TextInputLayout>
 
