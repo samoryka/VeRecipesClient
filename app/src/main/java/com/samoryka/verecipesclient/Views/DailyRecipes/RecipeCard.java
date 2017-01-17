@@ -18,6 +18,13 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.RecipeChromeCustomTab;
+import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
+import com.samoryka.verecipesclient.Web.RetrofitHelper;
+import com.samoryka.verecipesclient.Web.VeRecipesService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @Layout(R.layout.recipe_daily_card_view)
 public class RecipeCard {
@@ -35,6 +42,7 @@ public class RecipeCard {
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
     private DailyRecipesFragment mFragment;
+    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     public RecipeCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView, DailyRecipesFragment fragment) {
         mContext = context;
@@ -80,6 +88,7 @@ public class RecipeCard {
     @SwipeIn
     private void onSwipeIn() {
         mFragment.checkCardsLeft();
+        saveRecipe();
     }
 
     @SwipeInState
@@ -92,6 +101,23 @@ public class RecipeCard {
 
     private void cardClicked() {
         RecipeChromeCustomTab.openRecipeTab(mContext, mRecipe);
+    }
+
+    private void saveRecipe() {
+        long userId = SharedPreferencesUtility.getLoggedInUser(mContext).getId();
+
+        Call<String> call = veRecipesService.saveUserRecipe(userId, mRecipe.getId());
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 
 }

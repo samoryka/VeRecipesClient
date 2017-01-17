@@ -13,12 +13,21 @@ import android.view.ViewGroup;
 
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
-import com.samoryka.verecipesclient.Utilities.JSONConversion;
+import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
+import com.samoryka.verecipesclient.Web.RetrofitHelper;
+import com.samoryka.verecipesclient.Web.VeRecipesService;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * A fragment representing a list of Items.
@@ -34,7 +43,9 @@ public class RecipeListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyRecipeRecyclerViewAdapter mAdapter;
-    private List<Recipe> recipes;
+    private List<Recipe> mRecipes;
+
+    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +54,6 @@ public class RecipeListFragment extends Fragment {
     public RecipeListFragment() {
     }
 
-    @SuppressWarnings("unused")
     public static RecipeListFragment newInstance(int columnCount) {
         RecipeListFragment fragment = new RecipeListFragment();
         Bundle args = new Bundle();
@@ -76,10 +86,9 @@ public class RecipeListFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        recipes = JSONConversion.LoadRecipes(context);
-        mAdapter = new MyRecipeRecyclerViewAdapter(recipes, mListener);
 
-        recyclerView.setAdapter(mAdapter);
+        loadRecipes(context, recyclerView);
+
 
         createTouchHelper().attachToRecyclerView(recyclerView);
 
@@ -104,7 +113,11 @@ public class RecipeListFragment extends Fragment {
         mListener = null;
     }
 
-    // Implementation of swipe to delete
+    /**
+     * Implementation of swipe to delete
+     *
+     * @return
+     */
     private ItemTouchHelper createTouchHelper() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -116,22 +129,78 @@ public class RecipeListFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int position = viewHolder.getAdapterPosition();
+                Recipe recipeToDelete = mRecipes.get(position);
                 mAdapter.notifyItemRemoved(position);
-                recipes.remove(position);
+                mRecipes.remove(position);
                 checkAdapterEmpty();
 
+                unsaveRecipe(recipeToDelete);
             }
         };
 
         return new ItemTouchHelper(simpleItemTouchCallback);
     }
 
-    // checks if there are any recipe left to display. if that's the case, we'll display a placeholder
+    /**
+     * Checks if there are any recipe left to display. if that's the case, we'll display a placeholder
+     */
     private void checkAdapterEmpty() {
         if (mAdapter.getItemCount() == 0)
             mEmptyListPlaceHolderView.setVisibility(View.VISIBLE);
         else
             mEmptyListPlaceHolderView.setVisibility(View.GONE);
+    }
+
+    /**
+     * Loads user's saved recipes from the VeRecipes server
+     *
+     * @param context
+     * @param recyclerView the RecyclerView in which we want to load the recipes
+     */
+    private void loadRecipes(Context context, final RecyclerView recyclerView) {
+        long userId = SharedPreferencesUtility.getLoggedInUser(context).getId();
+
+        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesSavedByUser(userId);
+        recipeListObservable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Recipe>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Recipe> recipes) {
+                        mAdapter = new MyRecipeRecyclerViewAdapter(recipes, mListener);
+                        mRecipes = recipes;
+                        recyclerView.setAdapter(mAdapter);
+                        checkAdapterEmpty();
+                    }
+                });
+
+
+    }
+
+    private void unsaveRecipe(Recipe recipeToDelete) {
+        long userId = SharedPreferencesUtility.getLoggedInUser(getContext()).getId();
+
+        Call<String> call = veRecipesService.unSaveUserRecipe(userId, recipeToDelete.getId());
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
     }
 
     /**

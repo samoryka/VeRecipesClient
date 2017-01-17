@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     }
 
     private void refreshLoggedInUser() {
-        Call<AppUser> call = veRecipesService.refreshUser(loggedInUser.getUsername(), loggedInUser.getPassword());
+        Call<AppUser> call = veRecipesService.refreshLoggedInUser(loggedInUser.getUsername(), loggedInUser.getPassword());
         call.enqueue(new Callback<AppUser>() {
             @Override
             public void onResponse(Call<AppUser> call, Response<AppUser> response) {
