@@ -16,6 +16,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Views.DailyRecipes.DailyRecipesFragment;
+import com.samoryka.verecipesclient.Views.ProfilePage.ProfilePageFragment;
 import com.samoryka.verecipesclient.Views.SavedRecipes.RecipeListFragment;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
@@ -28,7 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener, RecipeListFragment.OnListFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener,
+        RecipeListFragment.OnListFragmentInteractionListener, ProfilePageFragment.OnFragmentInteractionListener {
 
     //indices to fragments
     private final int TAB_FIRST = FragNavController.TAB1;
@@ -64,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         //FragNav
         //list of fragments
         List<Fragment> fragments = new ArrayList<>(3);
-        fragments.add(new PlaceHolderFragment());
+        fragments.add(ProfilePageFragment.newInstance());
         fragments.add(DailyRecipesFragment.newInstance());
         fragments.add(RecipeListFragment.newInstance(1));
         //link fragments to container

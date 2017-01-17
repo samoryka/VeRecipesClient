@@ -47,5 +47,11 @@
     <string name="signup_error_confirm_password">The passwords do not match</string>
     <string name="signup_error_email">Invalid email address</string>
 
+    <!-- Profile screen -->
+    <string name="profile_hint_username">Username</string>
+    <string name="profile_hint_email">Email</string>
+    <string name="profile_button_logout">Logout</string>
+    <string name="profile_user_presentation">User details:</string>
+
 
 </resources>

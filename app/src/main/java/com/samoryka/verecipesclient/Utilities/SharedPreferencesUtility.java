@@ -46,7 +46,19 @@ public class SharedPreferencesUtility {
         prefsEditor.putString(USER_DETAILS, json);
         prefsEditor.putBoolean(USER_LOGIN, true);
         prefsEditor.commit();
+    }
 
+    public static void resetLoggedInUser(Context context) {
+        SharedPreferences.Editor prefsEditor = getPreferences(context).edit();
+
+        AppUser blankAppUser = new AppUser();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(blankAppUser);
+
+        prefsEditor.putString(USER_DETAILS, json);
+        prefsEditor.putBoolean(USER_LOGIN, false);
+        prefsEditor.commit();
     }
 
     public static Date getLastVisit(Context context) {
