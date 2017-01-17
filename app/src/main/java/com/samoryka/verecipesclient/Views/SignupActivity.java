@@ -30,6 +30,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText emailText;
     @BindView(R.id.signup_password)
     EditText passwordText;
+    @BindView(R.id.signup_confirm_password)
+    EditText confirmPasswordText;
     @BindView(R.id.btn_signup)
     Button signupButton;
     @BindView(R.id.link_login)
@@ -129,6 +131,7 @@ public class SignupActivity extends AppCompatActivity {
         String name = usernameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
+        String confirmPassword = confirmPasswordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             usernameText.setError(getString(R.string.login_error_username));
@@ -149,6 +152,13 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             passwordText.setError(null);
+        }
+
+        if (confirmPassword.isEmpty() || !confirmPassword.equals(password)) {
+            confirmPasswordText.setError(getString(R.string.signup_error_confirm_password));
+            valid = false;
+        } else {
+            confirmPasswordText.setError(null);
         }
 
         return valid;
