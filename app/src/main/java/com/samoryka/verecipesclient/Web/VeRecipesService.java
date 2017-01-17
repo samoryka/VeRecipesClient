@@ -5,6 +5,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -21,6 +22,9 @@ public interface VeRecipesService {
 
     @GET("user")
     Observable<AppUser> loginUser(@Query("username") String username, @Query("password") String password);
+
+    @GET("user")
+    Call<AppUser> refreshUser(@Query("username") String username, @Query("password") String password);
 
     @PUT("user")
     Observable<Boolean> signupUser(@Query("username") String username, @Query("password") String password, @Query("mail") String mail);

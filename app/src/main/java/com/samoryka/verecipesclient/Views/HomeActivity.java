@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
+import com.samoryka.verecipesclient.Model.AppUser;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
@@ -22,6 +23,10 @@ import com.samoryka.verecipesclient.Web.VeRecipesService;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity implements DailyRecipesFragment.OnFragmentInteractionListener, RecipeListFragment.OnListFragmentInteractionListener {
 
     //indices to fragments
@@ -32,22 +37,26 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     private BottomBar mBottomBar;
     private FragNavController fragNavController;
     private VeRecipesService veRecipesService;
+    private AppUser loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // If the user is already logged in, we redirect him to the main activity
-        if (!SharedPreferencesUtility.checkUserLoggedIn(this)) {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        }
-
-        veRecipesService = RetrofitHelper.initializeVeRecipesService();
-
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        veRecipesService = RetrofitHelper.initializeVeRecipesService();
+        // If the user is already logged in, we redirect him to the main activity
+        // Otherwise, we refresh his id and ake sure that his account is still available
+        if (!SharedPreferencesUtility.checkUserLoggedIn(this)) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            loggedInUser = SharedPreferencesUtility.getLoggedInUser(this);
+            refreshLoggedInUser();
+        }
 
         //FragNav
         //list of fragments
@@ -114,5 +123,20 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     @Override
     public void onListFragmentInteraction(Recipe recipe) {
 
+    }
+
+    private void refreshLoggedInUser() {
+        Call<AppUser> call = veRecipesService.refreshUser(loggedInUser.getUsername(), loggedInUser.getPassword());
+        call.enqueue(new Callback<AppUser>() {
+            @Override
+            public void onResponse(Call<AppUser> call, Response<AppUser> response) {
+                SharedPreferencesUtility.setLoggedInUser(getApplicationContext(), response.body());
+            }
+
+            @Override
+            public void onFailure(Call<AppUser> call, Throwable t) {
+
+            }
+        });
     }
 }
