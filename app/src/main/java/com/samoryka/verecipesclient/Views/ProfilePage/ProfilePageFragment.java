@@ -64,8 +64,11 @@ public class ProfilePageFragment extends Fragment {
         ButterKnife.bind(this, mView);
 
         AppUser loggedInUser = SharedPreferencesUtility.getLoggedInUser(getContext());
-        usernameText.setText(loggedInUser.getUsername());
-        emailText.setText(loggedInUser.getMail());
+        if (loggedInUser != null) {
+            usernameText.setText(loggedInUser.getUsername());
+            emailText.setText(loggedInUser.getMail());
+        }
+
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override

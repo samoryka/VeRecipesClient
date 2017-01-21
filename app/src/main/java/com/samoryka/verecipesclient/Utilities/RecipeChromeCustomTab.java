@@ -9,7 +9,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 
 /**
- * Created by kasam on 12/12/2016.
+ * Used to manage the recipe tabs open when the user clicks on a recipe
  */
 
 public class RecipeChromeCustomTab {

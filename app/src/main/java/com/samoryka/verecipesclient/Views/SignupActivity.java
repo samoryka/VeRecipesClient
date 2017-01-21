@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.samoryka.verecipesclient.R;
+import com.samoryka.verecipesclient.Security.InputValidator;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
 import com.samoryka.verecipesclient.Web.VeRecipesService;
 
@@ -24,7 +25,6 @@ import rx.schedulers.Schedulers;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
-    private static boolean signupSuccessful = false;
     @BindView(R.id.signup_username)
     EditText usernameText;
     @BindView(R.id.signup_email)
@@ -71,6 +71,7 @@ public class SignupActivity extends AppCompatActivity {
 
         signupButton.setEnabled(false);
 
+        // Progress dialog setup
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getString(R.string.signup_loading));
@@ -80,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // Asynchronous HTTP signup request
+        // HTTP Request synchronized with the UI thread
         Observable<Boolean> booleanObservable = veRecipesService.signupUser(username, password, email);
         booleanObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,25 +92,16 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        progressDialog.dismiss();
+                        onSignupFailed();
                     }
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        signupSuccessful = aBoolean;
+                        progressDialog.dismiss();
+                        onSignupSuccess();
                     }
                 });
-
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        if (signupSuccessful)
-                            onSignupSuccess();
-                        else
-                            onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
 
@@ -130,42 +122,17 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setEnabled(true);
     }
 
+    /**
+     * Makes sure that all the input fields are valid
+     *
+     * @return
+     */
     public boolean validate() {
-        boolean valid = true;
 
-        String name = usernameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-        String confirmPassword = confirmPasswordText.getText().toString();
+        return InputValidator.validateUsername(usernameText, this)
+                && InputValidator.validateEmail(emailText, this)
+                && InputValidator.validatePassword(passwordText, this)
+                && InputValidator.validateConfirmPassword(passwordText, confirmPasswordText, this);
 
-        if (name.isEmpty() || name.length() < 3) {
-            usernameText.setError(getString(R.string.login_error_username));
-            valid = false;
-        } else {
-            usernameText.setError(null);
-        }
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError(getString(R.string.signup_error_email));
-            valid = false;
-        } else {
-            emailText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4) {
-            passwordText.setError(getString(R.string.signup_error_password));
-            valid = false;
-        } else {
-            passwordText.setError(null);
-        }
-
-        if (confirmPassword.isEmpty() || !confirmPassword.equals(password)) {
-            confirmPasswordText.setError(getString(R.string.signup_error_confirm_password));
-            valid = false;
-        } else {
-            confirmPasswordText.setError(null);
-        }
-
-        return valid;
     }
 }

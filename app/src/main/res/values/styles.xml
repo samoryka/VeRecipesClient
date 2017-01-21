@@ -17,4 +17,16 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Input field for the login/signup screens -->
+    <style name="InputLabel" parent="Theme.AppCompat">
+
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+
+        <item name="colorAccent">@color/white</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+
 </resources>

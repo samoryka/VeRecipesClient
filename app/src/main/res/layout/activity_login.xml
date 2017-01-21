@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColorHint="@color/white">
+            android:theme="@style/InputLabel">
 
             <EditText
                 android:id="@+id/input_username"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColorHint="@color/white">
+            android:theme="@style/InputLabel">
 
             <EditText
                 android:id="@+id/input_password"

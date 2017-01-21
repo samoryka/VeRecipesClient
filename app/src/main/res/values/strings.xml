@@ -28,8 +28,6 @@
     <string name="login_signup_catchphrase">No account yet? Join us!</string>
     <string name="login_loading">Authenticating</string>
     <string name="login_error">Invalid password or username</string>
-    <string name="login_error_username">Invalid username (it should be at least 3 characters long)</string>
-    <string name="login_error_password">Invalid password (it should be at least 8 characters long)</string>
 
     <!-- Signup Screen -->
     <string name="signup_welcome_phrase">Join VeRecipes</string>
@@ -42,10 +40,18 @@
     <string name="title_activity_signup">SignupActivity</string>
     <string name="signup_loading">Creating account</string>
     <string name="signup_error">Account could not be created. Please try again</string>
-    <string name="signup_error_username">Invalid username (it should be at least 3 characters long)</string>
-    <string name="signup_error_password">Invalid password (it should be at least 8 characters long)</string>
-    <string name="signup_error_confirm_password">The passwords do not match</string>
-    <string name="signup_error_email">Invalid email address</string>
+
+
+    <!-- Input verification -->
+    <string name="input_error_username_length">The username must be at least 3 characters long</string>
+    <string name="input_error_username_characters">The username can only contain letters and numbers</string>
+
+    <string name="input_error_password_length">The password must be at least 8 characters long</string>
+    <string name="input_error_password_characters">The password cannot contain spaces</string>
+
+    <string name="input_error_confirm_password">The passwords do not match</string>
+
+    <string name="input_error_email">Invalid email address</string>
 
     <!-- Profile screen -->
     <string name="profile_hint_username">Username</string>
