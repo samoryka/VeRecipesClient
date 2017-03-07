@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        RetrofitHelper.context = this;
         veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
         // If the user is already logged in, we redirect him to the main activity

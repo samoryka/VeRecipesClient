@@ -1,5 +1,7 @@
 package com.samoryka.verecipesclient.Web;
 
+import android.content.Context;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
     private static final String VERECIPES_URL = "http://verecipes.eu-central-1.elasticbeanstalk.com/";
+    public static Context context;
     private static String storedUsername;
     private static String storedPassword;
 
@@ -61,6 +65,8 @@ public class RetrofitHelper {
 
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 
+        clientBuilder.cache(new Cache(context.getCacheDir(), 10 * 1024 * 1024)); // Cache of 10 MB
+
         /* DEBUG : requests logs
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -74,6 +80,7 @@ public class RetrofitHelper {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
+                        .header("Cache-Control", "public, max-age=" + 60)
                         .header("Authorization", AuthenticationTokenManager.generateBasicAuthenticationToken(username, password))
                         .method(original.method(), original.body())
                         .build();

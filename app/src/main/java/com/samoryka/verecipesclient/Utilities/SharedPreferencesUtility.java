@@ -19,6 +19,7 @@ public class SharedPreferencesUtility {
     private final static String LAST_VISIT = "lastVisit";
     private final static String LAST_RECIPE_SWIPED = "lastRecipeSwipedId";
 
+
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
