@@ -132,7 +132,7 @@ public class DailyRecipesFragment extends Fragment {
      */
     public void checkCardsLeft() {
         // If the card that's swiped is the last one, we hide the non-placeholder views
-        if (mSwipeView.getChildCount() > 1) {
+        if (mSwipeView.getChildCount() > 0) {
             mSwipeView.setVisibility(View.VISIBLE);
             mAceptBtn.setVisibility(View.VISIBLE);
             mRejectBtn.setVisibility(View.VISIBLE);
