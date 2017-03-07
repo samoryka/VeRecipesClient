@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
-import com.samoryka.verecipesclient.Web.RetrofitHelper;
-import com.samoryka.verecipesclient.Web.VeRecipesService;
+import com.samoryka.verecipesclient.Views.HomeActivity;
 
 import java.util.List;
 
@@ -44,8 +43,6 @@ public class RecipeListFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private MyRecipeRecyclerViewAdapter mAdapter;
     private List<Recipe> mRecipes;
-
-    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -160,7 +157,7 @@ public class RecipeListFragment extends Fragment {
     private void loadRecipes(Context context, final RecyclerView recyclerView) {
         long userId = SharedPreferencesUtility.getLoggedInUser(context).getId();
 
-        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesSavedByUser(userId);
+        Observable<List<Recipe>> recipeListObservable = HomeActivity.veRecipesService.listRecipesSavedByUser(userId);
         recipeListObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Recipe>>() {
@@ -189,7 +186,7 @@ public class RecipeListFragment extends Fragment {
     private void unsaveRecipe(Recipe recipeToDelete) {
         long userId = SharedPreferencesUtility.getLoggedInUser(getContext()).getId();
 
-        Call<String> call = veRecipesService.unSaveUserRecipe(userId, recipeToDelete.getId());
+        Call<String> call = HomeActivity.veRecipesService.unSaveUserRecipe(userId, recipeToDelete.getId());
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

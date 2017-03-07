@@ -19,8 +19,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.RecipeChromeCustomTab;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
-import com.samoryka.verecipesclient.Web.RetrofitHelper;
-import com.samoryka.verecipesclient.Web.VeRecipesService;
+import com.samoryka.verecipesclient.Views.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +41,6 @@ public class RecipeCard {
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
     private DailyRecipesFragment mFragment;
-    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     public RecipeCard(Context context, Recipe recipe, SwipePlaceHolderView swipeView, DailyRecipesFragment fragment) {
         mContext = context;
@@ -108,7 +106,7 @@ public class RecipeCard {
     private void saveRecipe() {
         long userId = SharedPreferencesUtility.getLoggedInUser(mContext).getId();
 
-        Call<String> call = veRecipesService.saveUserRecipe(userId, mRecipe.getId());
+        Call<String> call = HomeActivity.veRecipesService.saveUserRecipe(userId, mRecipe.getId());
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Security.InputValidator;
-import com.samoryka.verecipesclient.Web.RetrofitHelper;
-import com.samoryka.verecipesclient.Web.VeRecipesService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +35,6 @@ public class SignupActivity extends AppCompatActivity {
     Button signupButton;
     @BindView(R.id.link_login)
     TextView loginLink;
-    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         // HTTP Request synchronized with the UI thread
-        Observable<Boolean> booleanObservable = veRecipesService.signupUser(username, password, email);
+        Observable<Boolean> booleanObservable = HomeActivity.veRecipesService.signupUser(username, password, email);
         booleanObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Boolean>() {

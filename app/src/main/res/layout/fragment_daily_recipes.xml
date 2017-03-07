@@ -25,7 +25,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/daily_recipes_reject_button" />
+            android:background="@drawable/daily_recipes_reject_button"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/acceptBtn"
@@ -34,7 +35,8 @@
             android:layout_height="50dp"
             android:layout_marginLeft="50dp"
             android:background="@drawable/daily_recipes_save_button"
-            android:elevation="2dp" />
+            android:elevation="2dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

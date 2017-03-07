@@ -16,7 +16,6 @@ import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Security.InputValidator;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Web.RetrofitHelper;
-import com.samoryka.verecipesclient.Web.VeRecipesService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     @BindView(R.id.link_signup)
     TextView signupLink;
-    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         // HTTP Request synchronized with the UI thread
-        Observable<AppUser> appUserObservable = veRecipesService.loginUser(username, password);
+        Observable<AppUser> appUserObservable = HomeActivity.veRecipesService.loginUser(username, password);
         appUserObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<AppUser>() {

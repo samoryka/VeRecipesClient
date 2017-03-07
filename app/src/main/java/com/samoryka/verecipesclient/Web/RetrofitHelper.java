@@ -27,22 +27,21 @@ public class RetrofitHelper {
     private static final String VERECIPES_URL = "http://verecipes.eu-central-1.elasticbeanstalk.com/";
     private static String storedUsername;
     private static String storedPassword;
-    private static Retrofit.Builder retrofitBuilder;
 
     public static VeRecipesService initializeVeRecipesService() {
 
         GsonBuilder gsonBuilder = createGsonBuilder();
 
-        retrofitBuilder = new Retrofit.Builder()
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(VERECIPES_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()));
 
-        if (storedUsername != null && !storedUsername.isEmpty() && storedPassword != null && !storedPassword.isEmpty())
+        if (storedUsername != null && !storedUsername.isEmpty() && storedPassword != null && !storedPassword.isEmpty()) {
             retrofitBuilder.client(createOkHttpClient(storedUsername, storedPassword));
+        }
 
         Retrofit retrofit = retrofitBuilder.build();
-
         return retrofit.create(VeRecipesService.class);
     }
 
@@ -62,6 +61,13 @@ public class RetrofitHelper {
 
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 
+        /* DEBUG : requests logs
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        clientBuilder.addInterceptor(logging);
+        */
+
         clientBuilder.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -76,7 +82,6 @@ public class RetrofitHelper {
             }
         });
 
-
         return clientBuilder.build();
     }
 
@@ -84,9 +89,6 @@ public class RetrofitHelper {
         storedUsername = username;
         storedPassword = password;
 
-        OkHttpClient client = createOkHttpClient(username, password);
-
-        return retrofitBuilder.client(client).build().create(VeRecipesService.class);
-
+        return initializeVeRecipesService();
     }
 }

@@ -16,8 +16,7 @@ import com.samoryka.verecipesclient.Model.Recipe;
 import com.samoryka.verecipesclient.R;
 import com.samoryka.verecipesclient.Utilities.SharedPreferencesUtility;
 import com.samoryka.verecipesclient.Utilities.StringFormatUtility;
-import com.samoryka.verecipesclient.Web.RetrofitHelper;
-import com.samoryka.verecipesclient.Web.VeRecipesService;
+import com.samoryka.verecipesclient.Views.HomeActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -52,8 +51,6 @@ public class DailyRecipesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View mView;
     private Context mContext;
-
-    private VeRecipesService veRecipesService = RetrofitHelper.initializeVeRecipesService();
 
     // self-reference to be able to add a recipe on this fragment in an inner class (ie in the HTTP request)
     private DailyRecipesFragment thisFragment = this;
@@ -132,11 +129,8 @@ public class DailyRecipesFragment extends Fragment {
      */
     public void checkCardsLeft() {
         // If the card that's swiped is the last one, we hide the non-placeholder views
-        if (mSwipeView.getChildCount() > 0) {
-            mSwipeView.setVisibility(View.VISIBLE);
-            mAceptBtn.setVisibility(View.VISIBLE);
-            mRejectBtn.setVisibility(View.VISIBLE);
-            mPlaceHolderView.setVisibility(View.GONE);
+        if (mSwipeView.getChildCount() > 1) {
+            showCardStack();
         } else {
             mSwipeView.setVisibility(View.GONE);
             mAceptBtn.setVisibility(View.GONE);
@@ -145,12 +139,20 @@ public class DailyRecipesFragment extends Fragment {
         }
     }
 
+    private void showCardStack() {
+        mSwipeView.setVisibility(View.VISIBLE);
+        mAceptBtn.setVisibility(View.VISIBLE);
+        mRejectBtn.setVisibility(View.VISIBLE);
+        mPlaceHolderView.setVisibility(View.GONE);
+    }
+
     /**
      * Loads the current day's recipes into the stacked card view ("à la Tinder")
      */
     private void loadRecipes() {
+
         String dateString = StringFormatUtility.DateToYYYYMMDD(Calendar.getInstance().getTime());
-        Observable<List<Recipe>> recipeListObservable = veRecipesService.listRecipesByDate(dateString);
+        Observable<List<Recipe>> recipeListObservable = HomeActivity.veRecipesService.listRecipesByDate(dateString);
         recipeListObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Recipe>>() {
@@ -188,7 +190,13 @@ public class DailyRecipesFragment extends Fragment {
                             mSwipeView.addView(new RecipeCard(mContext, recipes.get(i), mSwipeView, thisFragment));
                         }
 
-                        checkCardsLeft();
+                        // In checkCardsLeft(), we have to check if the size of the list is greater than 1
+                        // since otherwise, the UI wont update properly when we swipe the cards.
+                        // Hence, we have to use this little trick
+                        if (mSwipeView.getChildCount() == 1)
+                            showCardStack();
+                        else
+                            checkCardsLeft();
                     }
                 });
 

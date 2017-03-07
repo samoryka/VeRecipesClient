@@ -3,6 +3,10 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!-- Home Activity -->
+    <string name="home_loading">Logging in</string>
+    <string name="home_login_error">Login error, please login again</string>
+
     <!-- Bottom Bar menu -->
     <string name="menu_bottombar_tab1">Profile</string>
     <string name="menu_bottombar_tab2">Today</string>
