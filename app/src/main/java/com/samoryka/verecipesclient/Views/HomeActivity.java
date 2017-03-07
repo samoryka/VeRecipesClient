@@ -135,7 +135,9 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
         call.enqueue(new Callback<AppUser>() {
             @Override
             public void onResponse(Call<AppUser> call, Response<AppUser> response) {
-                SharedPreferencesUtility.setLoggedInUser(getApplicationContext(), response.body());
+                AppUser refreshedUser = response.body();
+                SharedPreferencesUtility.setLoggedInUser(getApplicationContext(), refreshedUser);
+                RetrofitHelper.refreshAuthenticationToken(refreshedUser.getUsername(), refreshedUser.getPassword());
             }
 
             @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ import rx.schedulers.Schedulers;
  * create an instance of this fragment.
  */
 public class DailyRecipesFragment extends Fragment {
+
+    private final String TAG = "DailyRecipesFragment";
 
     @BindView(R.id.swipeView)
     SwipePlaceHolderView mSwipeView;
@@ -158,7 +161,7 @@ public class DailyRecipesFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d(TAG, e.toString());
                     }
 
                     @Override

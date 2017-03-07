@@ -130,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess(AppUser loggedUser) {
         loginButton.setEnabled(true);
         SharedPreferencesUtility.setLoggedInUser(this, loggedUser);
+        RetrofitHelper.refreshAuthenticationToken(loggedUser.getUsername(), loggedUser.getPassword());
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
     }
