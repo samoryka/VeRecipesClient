@@ -9,6 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
+        android:background="@drawable/recipe_daily_carp_swipe_out_message_background"
+        android:rotation="45"
         android:text="@string/daily_recipe_reject"
         android:textColor="@android:color/holo_red_light"
         android:textSize="32sp"
