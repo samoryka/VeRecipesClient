@@ -70,11 +70,12 @@ public class HomeActivity extends AppCompatActivity implements DailyRecipesFragm
     }
     @Override
     public void onBackPressed() {
+        /*
         if (fragNavController != null && fragNavController.getCurrentStack().size() > 1) {
             fragNavController.pop();
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {

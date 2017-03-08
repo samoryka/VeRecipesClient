@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         RetrofitHelper.refreshAuthenticationToken(loggedUser.getUsername(), loggedUser.getPassword());
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void onLoginFailed() {
