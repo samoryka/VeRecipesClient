@@ -19,6 +19,9 @@
 
     <!-- Saved Recipes -->
     <string name="saved_recipes_placeholder">No saved recipes</string>
+    <string name="saved_recipes_deleted_recipe">Recipe deleted</string>
+    <string name="saved_recipes_deleted_recipe_cancel">Recipe re-saved</string>
+    <string name="saved_recipes_deleted_recipe_undo">Undo</string>
 
     <!-- Recipe Viewer -->
     <string name="recipe_viewer_share">Share</string>

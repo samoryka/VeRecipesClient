@@ -2,6 +2,7 @@ package com.samoryka.verecipesclient.Views.SavedRecipes;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -125,13 +126,14 @@ public class RecipeListFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+
                 int position = viewHolder.getAdapterPosition();
                 Recipe recipeToDelete = mRecipes.get(position);
-                mAdapter.notifyItemRemoved(position);
                 mRecipes.remove(position);
+                mAdapter.notifyItemRemoved(position);
                 checkAdapterEmpty();
 
-                unsaveRecipe(recipeToDelete);
+                confirmUnsaveRecipe(position, recipeToDelete);
             }
         };
 
@@ -183,6 +185,11 @@ public class RecipeListFragment extends Fragment {
 
     }
 
+    /**
+     * Sends the request to unsave the recipe to the server
+     *
+     * @param recipeToDelete
+     */
     private void unsaveRecipe(Recipe recipeToDelete) {
         long userId = SharedPreferencesUtility.getLoggedInUser(getContext()).getId();
 
@@ -198,6 +205,40 @@ public class RecipeListFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Creates a snackbar enabling the user to decide whether or not we should unsave a recipe
+     *
+     * @param position position of the recipe in the recipe list
+     */
+    private void confirmUnsaveRecipe(final int position, final Recipe recipe) {
+        Snackbar snackBar = Snackbar.make(getView(), getString(R.string.saved_recipes_deleted_recipe), Snackbar.LENGTH_LONG);
+
+        // Undo (re-insert the recipe in the list)
+        snackBar.setAction(getString(R.string.saved_recipes_deleted_recipe_undo), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecipes.add(position, recipe);
+                mAdapter.notifyItemInserted(position);
+                Snackbar.make(getView(), getString(R.string.saved_recipes_deleted_recipe_cancel), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
+        // Delete the recipe in the database once the snack bar is gone
+        snackBar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+                if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE
+                        || event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT
+                        || event == Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE)
+                    unsaveRecipe(recipe);
+            }
+        });
+
+        snackBar.show();
     }
 
     /**
