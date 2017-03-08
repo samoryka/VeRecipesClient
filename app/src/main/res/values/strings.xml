@@ -22,6 +22,7 @@
     <string name="saved_recipes_deleted_recipe">Recipe deleted</string>
     <string name="saved_recipes_deleted_recipe_cancel">Recipe re-saved</string>
     <string name="saved_recipes_deleted_recipe_undo">Undo</string>
+    <string name="saved_recipes_preparation_time">Preparation time: %1d minutes</string>
 
     <!-- Recipe Viewer -->
     <string name="recipe_viewer_share">Share</string>

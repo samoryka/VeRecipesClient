@@ -39,15 +39,17 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mRecipe = mRecipes.get(position);
+
+        Recipe recipe = mRecipes.get(position);
+        holder.mRecipe = recipe;
 
         Glide.with(holder.mImageRecipeView.getContext())
-                .load(mRecipes.get(position).getImageURL())
+                .load(recipe.getImageURL())
                 .placeholder(R.color.colorPrimaryLight)
                 .into(holder.mImageRecipeView);
 
-        holder.mNameView.setText(mRecipes.get(position).getName());
-        holder.mPreparationTimeView.setText(mRecipes.get(position).getPreparationTime() + " min");
+        holder.mNameView.setText(recipe.getName());
+        holder.mPreparationTimeView.setText(holder.mImageRecipeView.getContext().getString(R.string.saved_recipes_preparation_time, recipe.getPreparationTime()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
