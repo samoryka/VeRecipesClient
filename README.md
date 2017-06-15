@@ -1,4 +1,4 @@
-# VeRecipesClient 
+# VeRecipes
 ```
 ⚠️ The backend server is not running anymore
 ```
