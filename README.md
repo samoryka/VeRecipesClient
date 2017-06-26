@@ -7,7 +7,7 @@
 
 We all know we should eat less meat both for the environment and our health. One challenge when changing your diet is finding new things to cook, hence having an easy method to find new ones would be welcome.
 <br/><br/>
-<i>Here comes VeRecipes.</i>
+This is where VeRecipes comes in.
 <br/>
 Each day, some new vegetarian recipes will be shown to you. Swipe the ones you like right to save them.
 <br/><br/>
